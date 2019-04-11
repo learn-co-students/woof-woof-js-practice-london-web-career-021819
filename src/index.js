@@ -1,6 +1,9 @@
 const dogDiv = document.querySelector("#dog-info");
 const dogBar = document.querySelector("#dog-bar");
 const dogsUrl = "http://localhost:3000/pups";
+let allDogs = []
+
+const dogFilterBtn = document.querySelector("#good-dog-filter")
 
 //API
 function getAllDogs() {
@@ -18,6 +21,7 @@ function updateDog(dog) {
 //DOM
 
 function renderDogBar(dogs) {
+    dogBar.innerHTML = ""
   dogs.forEach(dog => {
     const dogSpan = document.createElement("span");
     dogSpan.innerText = dog.name;
@@ -52,9 +56,19 @@ function toggleGoodBad(dog) {
   updateDog(dog);
 }
 
+dogFilterBtn.addEventListener('click', () => {
+    const filteredDogs = allDogs.filter( dog => {
+        return dog.isGoodDog === true
+    })
+    renderDogBar(filteredDogs)
+})
+
 //init
 function init() {
-  getAllDogs().then(renderDogBar);
+  getAllDogs().then(data => {
+      allDogs = data
+      renderDogBar(allDogs)
+    });
 }
 
 init();
